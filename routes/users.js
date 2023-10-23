@@ -2,7 +2,8 @@
 
 const User = require('../models/user');
 const express = require('express');
-const router = new express.Router(); // ** Bug #1 ** //
+	// ** Bug #1 ** //
+const router = new express.Router(); 
 const ExpressError = require('../helpers/expressError');
 const { authUser, requireLogin, requireAdmin } = require('../middleware/auth');
 

@@ -11,7 +11,7 @@ function timeToWords (timeStr) {
 		'Four',
 		'Five',
 		'Six',
-		'Seve',
+		'Seven',
 		'Eight',
 		'Nine',
 		'Ten',
@@ -80,6 +80,10 @@ function timeToWords (timeStr) {
 		'Fifty-Eight',
 		'Fifty-Nine'
 	];
+
+	if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+		return 'Invalid time';
+	}
 
 	let period = 'AM';
 	if (hours >= 12) {

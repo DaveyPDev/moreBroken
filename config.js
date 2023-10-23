@@ -1,6 +1,7 @@
 /** Shared config for application; can be req'd many places. */
 
-require('dotenv');
+// ** Bug #3 ** //
+require('dotenv').config();
 
 const SECRET_KEY = process.env.SECRET_KEY || 'development-secret-key';
 
@@ -15,7 +16,19 @@ const DB_URI =
 
 module.exports = {
   BCRYPT_WORK_FACTOR,
+  SECRET_KEY,ll,
+  PORT,
+  DB_URI
+};
+
+
+// ** Bug #4 ** //
+module.exports = {
+  BCRYPT_WORK_FACTOR,
   SECRET_KEY,
   PORT,
   DB_URI
 };
+
+
+

@@ -33,4 +33,42 @@
       throw new ExpressError('User not found', 404)
     }
 
-## Bug #3 : 
+
+## Bug #3 : Config Export
+
+    ** Bug Location
+    -File: Config.js
+    -Line: #004
+
+    ** Description
+    - Missing .config()
+
+  // Added .config() to require('dotenv')
+
+
+## Bug #4 : Config Export
+
+    ** Bug Location
+    -File: Config.js
+    -Line: #025
+
+    ** Description
+    - Missing export
+
+  // Added module.exports = {
+    BCRYPT_WORK_FACTOR,
+    SECRET_KEY,
+    PORT,
+    DB_URI
+};
+
+
+// ** Bug #5 ** //
+
+  ** Bug Location
+  -File: routes/auth.js
+  Line: #074
+
+  ** Description
+  - Missing await in
+  let user = await User.update(req.params.username, fields);
