@@ -48,7 +48,7 @@ function authUser(req, res, next) {
   try {
     const token = req.body._token || req.query._token;
     if (token) {
-      let payload = jwt.decode(token);
+      let payload = jwt.verify(token, SECRET_KEY);
       req.curr_username = payload.username;
       req.curr_admin = payload.admin;
     }
@@ -57,7 +57,7 @@ function authUser(req, res, next) {
     err.status = 401;
     return next(err);
   }
-} // end
+} // end// end
 
 module.exports = {
   requireLogin,

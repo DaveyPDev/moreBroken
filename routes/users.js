@@ -2,8 +2,8 @@
 
 const User = require('../models/user');
 const express = require('express');
-	// ** Bug #1 ** //
-const router = new express.Router(); 
+// ** Bug #1 ** //
+const router = express.Router();
 const ExpressError = require('../helpers/expressError');
 const { authUser, requireLogin, requireAdmin } = require('../middleware/auth');
 
@@ -18,8 +18,8 @@ const { authUser, requireLogin, requireAdmin } = require('../middleware/auth');
 
 router.get('/', authUser, requireLogin, async function (req, res, next) {
 	try {
-		let users = await User.getAll();
-		return res.json({ users });
+		const users = await User.getAll();
+		return res.status(200).json({ users });
 	} catch (err) {
 		return next(err);
 	}
@@ -60,19 +60,24 @@ router.get('/:username', authUser, requireLogin, async function (req, res, next)
  *
  */
 
-router.patch('/:username', authUser, requireLogin, requireAdmin, async function (req, res, next) {
+router.patch('/users/:username', authUser, requireLogin, requireAdmin, async function (req, res, next) {
 	try {
 		if (!req.curr_admin && req.curr_username !== req.params.username) {
-			throw new ExpressError('Only  that user or admin can edit a user.', 401);
+			throw new ExpressError('Only that user or admin can edit a user.', 401);
 		}
 
 		// get fields to change; remove token so we don't try to change it
 		let fields = { ...req.body };
 		delete fields._token;
 
-    // ** Bug #02 **
-
+		// ** Bug #02 ** //
 		let user = await User.update(req.params.username, fields);
+
+		// If the user doesn't exist, return a 404 status code
+		if (!user) {
+			return res.status(404).json({ message: 'User not found' });
+		}
+
 		return res.json({ user });
 	} catch (err) {
 		return next(err);
@@ -89,13 +94,17 @@ router.patch('/:username', authUser, requireLogin, requireAdmin, async function 
  * If user cannot be found, return a 404 err.
  */
 
-router.delete('/:username', authUser, requireAdmin, async function (req, res, next) {
+router.delete('/:username', authUser, requireLogin, async function (req, res, next) {
 	try {
-		User.delete(req.params.username);
-		return res.json({ message: 'deleted' });
+		if (!req.curr_admin) {
+			throw new ExpressError('Only an admin can delete a user.', 401);
+		}
+
+		await User.delete(req.params.username);
+		return res.status(204).json({ message: 'deleted' });
 	} catch (err) {
 		return next(err);
 	}
-}); // end
+});// end
 
 module.exports = router;

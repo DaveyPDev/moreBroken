@@ -14,12 +14,17 @@ const createTokenForUser = require('../helpers/createToken');
  *
  */
 
-router.post('/register', async function(req, res, next) {
+router.post('/register', async function (req, res, next) {
   try {
-    const { username, password, first_name, last_name, email, phone } = req.body;
-    let user = await User.register({username, password, first_name, last_name, email, phone});
-    const token = createTokenForUser(username, user.admin);
-    return res.status(201).json({ token });
+    const { username } = req.body;
+    const userExists = await User.exists(username);
+    if (userExists) {
+      return res.status(400).json({ message: `There already exists a user with username '${username}'`, status: 400 });
+    } else {
+      const user = await User.register(req.body);
+      const token = jwt.sign({ username, is_admin: user.is_admin }, SECRET_KEY);
+      return res.status(201).json({ token });
+    }
   } catch (err) {
     return next(err);
   }

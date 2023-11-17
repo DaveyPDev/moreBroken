@@ -12,9 +12,9 @@
     - File: users.test.js
     - Line: #025
 
-    ** Fix 
+    <!-- ** Fix 
     @ const router = express.Router();
-      - remove "new" from const router syntax 
+      - remove "new" from const router syntax  -->
     
     
 ## Bug #2 : Admin
@@ -67,8 +67,44 @@
 
   ** Bug Location
   -File: routes/auth.js
-  Line: #074
+  Line: #041
 
   ** Description
   - Missing await in
   let user = await User.update(req.params.username, fields);
+
+// ** Bug #6 ** //
+
+  ** Bug Location
+  -File: app.js
+  Line: #038
+
+  ** Description
+  - Extra module.exports = app
+
+  ** Fix Issue
+  - Removed Second module.export = app
+
+// ** Bug #7 ** //
+
+  ** Bug Location
+  -File app.js
+  Line: xx
+
+  ** Descrition
+  - Missing an app.get('/')
+
+  ** Fix Issue
+  - Added an app.get('/') for routing
+  - 
+// ** Bug #8 ** //
+
+  ** Bug Location
+  -File models/user.js
+  Line: 115
+
+  ** Descrition
+  - Missing throw for the throw new Error
+
+  ** Fix Issue
+  - Added throw before new Error
